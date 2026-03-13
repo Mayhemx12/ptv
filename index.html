@@ -15,42 +15,45 @@
             overflow: hidden;
         }
 
-        /* BACK TO THE STABLE BG VERSION */
+        /* LAYER 1: THE MAIN WALLPAPER */
         #parallax-bg {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
-                        url('https://ptv.mayteckcs.com/ptv-wallpaper.jpg');
+            top: -5%; left: -5%; width: 110%; height: 110%;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url("ptv-wallpaper.jpg");
             background-size: cover;
             background-position: center;
             z-index: -5;
+            transition: transform 0.1s ease-out;
         }
 
-        /* FALLING GIRL LAYER */
+        /* LAYER 2: THE FALLING GIRL ICON (Floating Layer) */
         #falling-girl {
             position: fixed;
-            top: 50%; left: 75%;
-            width: 200px; height: 200px;
-            margin-top: -100px; margin-left: -100px;
-            background: url('girl.png'); /* Looking for your file */
+            top: 50%; left: 50%;
+            width: 150px; height: 150px;
+            margin-top: -75px; margin-left: -75px;
+            /* Using a high-quality SVG path for the PTV silhouette */
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23d4af37" d="M50,10 C60,30 90,40 95,60 C100,80 80,95 50,90 C20,95 0,80 5,60 C10,40 40,30 50,10 Z" opacity="0.8"/></svg>');
             background-size: contain;
             background-repeat: no-repeat;
             z-index: -4;
-            filter: drop-shadow(0 0 15px #ff007f);
+            filter: drop-shadow(0 0 10px #ff007f);
+            transition: transform 0.05s linear;
             pointer-events: none;
         }
 
-        /* REFINED SHARDS (NOT AN X) */
-        .shards {
+        /* LAYER 3: REFINED SHATTERED GLASS (No more big X) */
+        .shatter-lines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
             opacity: 0.3;
             background: 
-                linear-gradient(115deg, transparent 49.9%, #fff 50%, transparent 50.1%),
-                linear-gradient(250deg, transparent 49.9%, #d4af37 50%, transparent 50.1%),
-                linear-gradient(20deg, transparent 49.9%, #fff 50%, transparent 50.1%);
+                linear-gradient(110deg, transparent 49.9%, #fff 50%, transparent 50.1%),
+                linear-gradient(200deg, transparent 49.9%, #d4af37 50%, transparent 50.1%),
+                linear-gradient(10deg, transparent 49.9%, #fff 50%, transparent 50.1%),
+                linear-gradient(300deg, transparent 49.9%, #d4af37 50%, transparent 50.1%);
         }
 
         .container {
@@ -80,6 +83,7 @@
             padding: 15px;
             min-width: 85px;
             text-align: center;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
         }
 
         .number { font-size: 2.8rem; display: block; color: #fff; line-height: 1; }
@@ -98,7 +102,7 @@
 
     <div id="parallax-bg"></div>
     <div id="falling-girl"></div>
-    <div class="shards"></div>
+    <div class="shatter-lines"></div>
 
     <div class="container">
         <h1>Hold On Till May</h1>
@@ -112,17 +116,21 @@
     </div>
 
     <script>
-        const girl = document.getElementById('falling-girl');
         const bg = document.getElementById('parallax-bg');
+        const girl = document.getElementById('falling-girl');
 
         document.addEventListener('mousemove', (e) => {
             const x = (window.innerWidth / 2 - e.pageX);
             const y = (window.innerHeight / 2 - e.pageY);
             
-            // Subtle movement for the girl only to keep the BG stable
-            girl.style.transform = `translate(${x / 25}px, ${y / 25}px)`;
+            // Background moves slowly
+            bg.style.transform = `translate(${x / 50}px, ${y / 50}px)`;
+            
+            // Girl moves faster (creates the 3D parallax feel)
+            girl.style.transform = `translate(${x / 20}px, ${y / 20}px) rotate(${x / 100}deg)`;
         });
 
+        // Countdown logic (Sunday, March 15th)
         const target = new Date("March 15, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
