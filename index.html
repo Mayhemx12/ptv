@@ -104,6 +104,20 @@
         @media (max-width: 600px) {
             #falling-girl { width: 100px; height: 100px; bottom: 5%; right: 5%; }
         }
+
+        /* Screen Shake Effect */
+        .shake-impact {
+            animation: impact 0.4s ease-out;
+        }
+
+        @keyframes impact {
+            0% { transform: translate(0,0); filter: brightness(2); }
+            10% { transform: translate(-10px, 5px) rotate(-1deg); }
+            30% { transform: translate(10px, -5px) rotate(1deg); }
+            50% { transform: translate(-5px, 2px); }
+            100% { transform: translate(0,0); filter: brightness(1); }
+        }
+        
     </style>
 </head>
 <body>
@@ -139,14 +153,25 @@
 });
 
         const targetDate = new Date("March 15, 2026 00:00:00").getTime();
-        setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            document.getElementById("days").innerText = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-            document.getElementById("hours").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-            document.getElementById("minutes").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-            document.getElementById("seconds").innerText = Math.max(0, Math.floor((distance % (1000 * 60)) / 1000));
-        }, 1000);
+const container = document.querySelector('.container');
+
+setInterval(() => {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+    
+    const s = Math.max(0, Math.floor((distance % (1000 * 60)) / 1000));
+    
+    // Trigger shake when seconds hit zero
+    if (s === 0) {
+        container.classList.add('shake-impact');
+        setTimeout(() => container.classList.remove('shake-impact'), 400);
+    }
+
+    document.getElementById("days").innerText = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+    document.getElementById("hours").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    document.getElementById("minutes").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+    document.getElementById("seconds").innerText = s.toString().padStart(2, '0');
+}, 1000);
     </script>
 </body>
 </html>
