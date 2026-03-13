@@ -36,13 +36,18 @@
             width: 180px; 
             height: 180px;
             z-index: -4;
-            /* Swapped the code-blob for your actual image file */
             background: url('girl.png') no-repeat center;
             background-size: contain;
             filter: drop-shadow(0 0 10px #ff007f);
-            transition: transform 0.1s ease-out;
             pointer-events: none;
+            /* This connects to the wobble math below */
+            animation: windWobble 4s ease-in-out infinite;
         }
+
+@keyframes windWobble {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: translateY(-15px) rotate(3deg); }
+}
 
 
         .container {
@@ -122,11 +127,16 @@
         const girl = document.getElementById('falling-girl');
 
         document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2);
-            const moveY = (e.clientY - window.innerHeight / 2);
-            bg.style.transform = `translateX(${moveX / 50}px) translateY(${moveY / 50}px)`;
-            girl.style.transform = `translateX(${moveX / 15}px) translateY(${moveY / 15}px) rotate(${moveX / 50}deg)`;
-        });
+    const moveX = (e.clientX - window.innerWidth / 2);
+    const moveY = (e.clientY - window.innerHeight / 2);
+    
+    // Background movement
+    bg.style.transform = `translateX(${moveX / 50}px) translateY(${moveY / 50}px)`;
+    
+    // Girl movement (Margin used so it doesn't override the 'transform' animation)
+    girl.style.marginRight = (moveX / -15) + 'px';
+    girl.style.marginBottom = (moveY / -15) + 'px';
+});
 
         const targetDate = new Date("March 15, 2026 00:00:00").getTime();
         setInterval(() => {
