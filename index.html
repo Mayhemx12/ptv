@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PTV // HOLD ON TILL MAY</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Permanent+Marker&display=swap');
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background-color: #000;
+            color: #ff007f;
+            font-family: 'Oswald', sans-serif;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .parallax-wrapper {
+            position: fixed;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            z-index: -5;
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
+                              url('ptv-wallpaper.jpg');
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.2s cubic-bezier(0.2, 0.5, 0.3, 1);
+        }
+
+        /* EMBEDDED SILHOUETTE - No PNG file required! */
+        #falling-girl {
+            position: fixed;
+            bottom: 15%; 
+            right: 10%;
+            width: 180px; 
+            height: 180px;
+            z-index: -4;
+            background-color: #d4af37; /* The Gold Color */
+            /* This "mask" creates the shape of the girl */
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M45,10 C50,25 75,35 90,50 C100,65 85,85 60,90 C40,95 15,85 10,70 C5,55 25,40 35,25 C40,15 45,10 45,10 Z"/></svg>') no-repeat center;
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M45,10 C50,25 75,35 90,50 C100,65 85,85 60,90 C40,95 15,85 10,70 C5,55 25,40 35,25 C40,15 45,10 45,10 Z"/></svg>') no-repeat center;
+            -webkit-mask-size: contain;
+            mask-size: contain;
+            filter: drop-shadow(0 0 10px #ff007f);
+            transition: transform 0.1s ease-out;
+            pointer-events: none;
+        }
+
+        .shatter {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.4;
+            background: 
+                linear-gradient(135deg, transparent 49.9%, #fff 50%, transparent 50.1%),
+                linear-gradient(225deg, transparent 49.9%, #d4af37 50%, transparent 50.1%);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            border: 15px solid #d4af37;
+            box-sizing: border-box;
+            background: rgba(0,0,0,0.3);
+            position: relative;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: 'Permanent Marker', cursive;
+            font-size: clamp(1.8rem, 8vw, 3.5rem);
+            color: #ff007f;
+            margin: 0;
+            text-shadow: 3px 3px 0px #000;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        #countdown { 
+            display: flex; 
+            gap: 10px; 
+            margin-top: 20px;
+            flex-wrap: wrap; 
+            justify-content: center;
+        }
+
+        .time-block {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff007f;
+            padding: 10px;
+            min-width: 75px;
+            text-align: center;
+        }
+
+        .number { font-size: clamp(1.5rem, 5vw, 3rem); display: block; color: #fff; line-height: 1; }
+        .label { font-size: 0.7rem; color: #d4af37; text-transform: uppercase; letter-spacing: 1px; }
+
+        .lyrics {
+            margin-top: 30px;
+            font-family: 'Permanent Marker', cursive;
+            font-size: clamp(1rem, 4vw, 1.8rem);
+            color: #fff;
+            text-shadow: 2px 2px #ff007f;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            #falling-girl { width: 100px; height: 100px; bottom: 5%; right: 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="parallax-wrapper" id="parallax-bg"></div>
+    <div id="falling-girl"></div>
+    <div class="shatter"></div>
+
+    <div class="container">
+        <h1>Hold On Till May</h1>
+        <div id="countdown">
+            <div class="time-block"><span class="number" id="days">00</span><span class="label">Days</span></div>
+            <div class="time-block"><span class="number" id="hours">00</span><span class="label">Hrs</span></div>
+            <div class="time-block"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
+            <div class="time-block"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
+        </div>
+        <div class="lyrics">"Darling, you'll be okay."</div>
+    </div>
+
+    <script>
+        const bg = document.getElementById('parallax-bg');
+        const girl = document.getElementById('falling-girl');
+
+        document.addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2);
+            const moveY = (e.clientY - window.innerHeight / 2);
+            bg.style.transform = `translateX(${moveX / 50}px) translateY(${moveY / 50}px)`;
+            girl.style.transform = `translateX(${moveX / 15}px) translateY(${moveY / 15}px) rotate(${moveX / 50}deg)`;
+        });
+
+        const targetDate = new Date("March 15, 2026 00:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            document.getElementById("days").innerText = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
+            document.getElementById("hours").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            document.getElementById("minutes").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
+            document.getElementById("seconds").innerText = Math.max(0, Math.floor((distance % (1000 * 60)) / 1000));
+        }, 1000);
+    </script>
+</body>
+</html>
