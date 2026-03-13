@@ -16,17 +16,16 @@
             perspective: 1000px;
         }
 
-															   
-        .parallax-bg {
+        .parallax-wrapper {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-									  
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
             z-index: -5;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
-                        url('ptv-wallpaper.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
+                              url('ptv-wallpaper.jpg');
             background-size: cover;
             background-position: center;
-																	  
+            transition: transform 0.2s cubic-bezier(0.2, 0.5, 0.3, 1);
         }
 
         /* EMBEDDED SILHOUETTE - No PNG file required! */
@@ -46,7 +45,6 @@
             filter: drop-shadow(0 0 10px #ff007f);
             transition: transform 0.1s ease-out;
             pointer-events: none;
-														  
         }
 
         .shatter {
@@ -75,7 +73,6 @@
 
         h1 {
             font-family: 'Permanent Marker', cursive;
-															
             font-size: clamp(1.8rem, 8vw, 3.5rem);
             color: #ff007f;
             margin: 0;
