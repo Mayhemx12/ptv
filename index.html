@@ -3,43 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PTV // HOLD ON TILL MAY</title>
+    <title>HOLD ON TILL MAY</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@700&family=Permanent+Marker&display=swap');
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            background-color: #000;
+            background: #000;
             color: #ff007f;
             font-family: 'Oswald', sans-serif;
             overflow: hidden;
-            perspective: 1000px;
         }
 
-        /* PARALLAX LAYER */
-        .parallax-wrapper {
+        /* LAYER 1: THE MAIN WALLPAPER */
+        #parallax-bg {
             position: fixed;
-            top: -10%; left: -10%;
-            width: 120%; height: 120%;
-            z-index: -3;
-            /* Using relative path - best for GitHub root folders */
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), 
-                              url('ptv-wallpaper.jpg');
+            top: -5%; left: -5%; width: 110%; height: 110%;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.7)), url("ptv-wallpaper.jpg");
             background-size: cover;
             background-position: center;
-            transition: transform 0.2s cubic-bezier(0.2, 0.5, 0.3, 1);
+            z-index: -5;
+            transition: transform 0.1s ease-out;
         }
 
-        /* DYNAMIC SHATTER LINES */
-        .shatter {
+        /* LAYER 2: THE FALLING GIRL ICON (Floating Layer) */
+        #falling-girl {
+            position: fixed;
+            top: 50%; left: 50%;
+            width: 150px; height: 150px;
+            margin-top: -75px; margin-left: -75px;
+            /* Using a high-quality SVG path for the PTV silhouette */
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%23d4af37" d="M50,10 C60,30 90,40 95,60 C100,80 80,95 50,90 C20,95 0,80 5,60 C10,40 40,30 50,10 Z" opacity="0.8"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: -4;
+            filter: drop-shadow(0 0 10px #ff007f);
+            transition: transform 0.05s linear;
+            pointer-events: none;
+        }
+
+        /* LAYER 3: REFINED SHATTERED GLASS (No more big X) */
+        .shatter-lines {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.4;
+            opacity: 0.3;
             background: 
-                linear-gradient(135deg, transparent 49.9%, #fff 50%, transparent 50.1%),
-                linear-gradient(225deg, transparent 49.9%, #d4af37 50%, transparent 50.1%);
+                linear-gradient(110deg, transparent 49.9%, #fff 50%, transparent 50.1%),
+                linear-gradient(200deg, transparent 49.9%, #d4af37 50%, transparent 50.1%),
+                linear-gradient(10deg, transparent 49.9%, #fff 50%, transparent 50.1%),
+                linear-gradient(300deg, transparent 49.9%, #d4af37 50%, transparent 50.1%);
         }
 
         .container {
@@ -50,16 +64,14 @@
             height: 100vh;
             border: 15px solid #d4af37;
             box-sizing: border-box;
-            background: rgba(0,0,0,0.3);
-            position: relative;
+            background: rgba(0,0,0,0.1);
         }
 
         h1 {
             font-family: 'Permanent Marker', cursive;
             font-size: 3.5rem;
-            color: #ff007f;
+            text-shadow: 4px 4px 0 #000;
             margin: 0;
-            text-shadow: 3px 3px 0px #000;
             text-transform: uppercase;
         }
 
@@ -69,15 +81,15 @@
             background: rgba(0, 0, 0, 0.9);
             border: 2px solid #ff007f;
             padding: 15px;
-            min-width: 90px;
+            min-width: 85px;
             text-align: center;
-            box-shadow: 0 0 20px rgba(255, 0, 127, 0.3);
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4);
         }
 
-        .number { font-size: 3rem; display: block; color: #fff; line-height: 1; }
-        .label { font-size: 0.8rem; color: #d4af37; text-transform: uppercase; letter-spacing: 2px; }
+        .number { font-size: 2.8rem; display: block; color: #fff; line-height: 1; }
+        .label { font-size: 0.8rem; color: #d4af37; text-transform: uppercase; }
 
-        .lyrics {
+        .footer {
             margin-top: 40px;
             font-family: 'Permanent Marker', cursive;
             font-size: 1.8rem;
@@ -88,40 +100,45 @@
 </head>
 <body>
 
-    <div class="parallax-wrapper" id="parallax-bg"></div>
-    <div class="shatter"></div>
+    <div id="parallax-bg"></div>
+    <div id="falling-girl"></div>
+    <div class="shatter-lines"></div>
 
     <div class="container">
         <h1>Hold On Till May</h1>
-        
         <div id="countdown">
             <div class="time-block"><span class="number" id="days">00</span><span class="label">Days</span></div>
             <div class="time-block"><span class="number" id="hours">00</span><span class="label">Hrs</span></div>
             <div class="time-block"><span class="number" id="minutes">00</span><span class="label">Mins</span></div>
             <div class="time-block"><span class="number" id="seconds">00</span><span class="label">Secs</span></div>
         </div>
-
-        <div class="lyrics">"Darling, you'll be okay."</div>
+        <div class="footer">"Darling, you'll be okay."</div>
     </div>
 
     <script>
-        // PARALLAX EFFECT
         const bg = document.getElementById('parallax-bg');
+        const girl = document.getElementById('falling-girl');
+
         document.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX - window.innerWidth / 2) / 50;
-            const moveY = (e.clientY - window.innerHeight / 2) / 50;
-            bg.style.transform = `translateX(${moveX}px) translateY(${moveY}px)`;
+            const x = (window.innerWidth / 2 - e.pageX);
+            const y = (window.innerHeight / 2 - e.pageY);
+            
+            // Background moves slowly
+            bg.style.transform = `translate(${x / 50}px, ${y / 50}px)`;
+            
+            // Girl moves faster (creates the 3D parallax feel)
+            girl.style.transform = `translate(${x / 20}px, ${y / 20}px) rotate(${x / 100}deg)`;
         });
 
-        // COUNTDOWN
-        const targetDate = new Date("March 15, 2026 00:00:00").getTime();
+        // Countdown logic (Sunday, March 15th)
+        const target = new Date("March 15, 2026 00:00:00").getTime();
         setInterval(() => {
             const now = new Date().getTime();
-            const distance = targetDate - now;
-            document.getElementById("days").innerText = Math.max(0, Math.floor(distance / (1000 * 60 * 60 * 24)));
-            document.getElementById("hours").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-            document.getElementById("minutes").innerText = Math.max(0, Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)));
-            document.getElementById("seconds").innerText = Math.max(0, Math.floor((distance % (1000 * 60)) / 1000));
+            const diff = target - now;
+            document.getElementById("days").innerText = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+            document.getElementById("hours").innerText = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            document.getElementById("minutes").innerText = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+            document.getElementById("seconds").innerText = Math.max(0, Math.floor((diff % (1000 * 60)) / 1000));
         }, 1000);
     </script>
 </body>
