@@ -36,12 +36,9 @@
             width: 180px; 
             height: 180px;
             z-index: -4;
-            background-color: #d4af37; /* The Gold Color */
-            /* This "mask" creates the shape of the girl */
-            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M45,10 C50,25 75,35 90,50 C100,65 85,85 60,90 C40,95 15,85 10,70 C5,55 25,40 35,25 C40,15 45,10 45,10 Z"/></svg>') no-repeat center;
-            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M45,10 C50,25 75,35 90,50 C100,65 85,85 60,90 C40,95 15,85 10,70 C5,55 25,40 35,25 C40,15 45,10 45,10 Z"/></svg>') no-repeat center;
-            -webkit-mask-size: contain;
-            mask-size: contain;
+            /* Swapped the code-blob for your actual image file */
+            background: url('girl.png') no-repeat center;
+            background-size: contain;
             filter: drop-shadow(0 0 10px #ff007f);
             transition: transform 0.1s ease-out;
             pointer-events: none;
